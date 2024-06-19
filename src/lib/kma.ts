@@ -18,7 +18,7 @@ export enum weatherCode {
   snow_flurry = 7,
 }
 
-enum xyConvertCode {
+export enum xyConvertCode {
   grid = "toXY",
   else = "",
 }
@@ -116,7 +116,11 @@ export default class KmaClient {
    * @param {number} v2 경도 또는 격자 y 좌표
    * @returns {object} 변환된 격자 좌표 또는 위경도 좌표
    */
-  dfs_xy_conv(code: xyConvertCode, v1: number, v2: number): object {
+  dfs_xy_conv(
+    code: xyConvertCode,
+    v1: number,
+    v2: number
+  ): { x: number; y: number } {
     const DEGRAD = Math.PI / 180.0;
     const RADDEG = 180.0 / Math.PI;
 
@@ -134,21 +138,21 @@ export default class KmaClient {
     sf = (Math.pow(sf, sn) * Math.cos(slat1)) / sn;
     let ro = Math.tan(Math.PI * 0.25 + olat * 0.5);
     ro = (re * sf) / Math.pow(ro, sn);
-    let rs: { [key: string]: number } = {};
+    let rs = { x: 0, y: 0 };
     if (code === "toXY") {
-      rs["lat"] = v1;
-      rs["lng"] = v2;
+      rs.x = v1;
+      rs.y = v2;
       let ra = Math.tan(Math.PI * 0.25 + v1 * DEGRAD * 0.5);
       ra = (re * sf) / Math.pow(ra, sn);
       let theta = v2 * DEGRAD - olon;
       if (theta > Math.PI) theta -= 2.0 * Math.PI;
       if (theta < -Math.PI) theta += 2.0 * Math.PI;
       theta *= sn;
-      rs["x"] = Math.floor(ra * Math.sin(theta) + 42.5 + 0.5); // XO 수정
-      rs["y"] = Math.floor(ro - ra * Math.cos(theta) + 135.0 + 0.5); // YO 수정
+      rs.x = Math.floor(ra * Math.sin(theta) + 42.5 + 0.5); // XO 수정
+      rs.y = Math.floor(ro - ra * Math.cos(theta) + 135.0 + 0.5); // YO 수정
     } else {
-      rs["x"] = v1;
-      rs["y"] = v2;
+      rs.x = v1;
+      rs.y = v2;
       let xn = v1 - 42.5; // XO 수정
       let yn = ro - v2 + 135.0; // YO 수정
       let ra = Math.sqrt(xn * xn + yn * yn);
@@ -168,8 +172,8 @@ export default class KmaClient {
         }
       }
       let alon = theta / sn + olon;
-      rs["lat"] = alat * RADDEG;
-      rs["lng"] = alon * RADDEG;
+      rs.x = alat * RADDEG;
+      rs.y = alon * RADDEG;
     }
     return rs;
   }

@@ -1,7 +1,7 @@
 import { SimpleSouthKoreaMapChart } from "@/components/korea-map/SouthKoreaMap";
 import { Skeleton } from "@/components/ui/skeleton";
 import coordinates from "@/data/coordinates";
-import KmaClient, { weatherCode } from "@/lib/kma";
+import KmaClient, { weatherCode, xyConvertCode } from "@/lib/kma";
 import { useEffect, useState } from "react";
 
 const setColorByCount = (count: number) => {
@@ -40,7 +40,8 @@ export default function TrackerPage() {
     const success = async (position: GeolocationPosition) => {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
-      const res = await kmaClient.getWeatherInfo(lat, lon);
+      const fixedCoord = kmaClient.dfs_xy_conv(xyConvertCode.grid, lat, lon);
+      const res = await kmaClient.getWeatherInfo(fixedCoord.x, fixedCoord.y);
       setUserWeather({
         temp: res.temprature,
         speed: res.speed,
@@ -81,7 +82,7 @@ export default function TrackerPage() {
   }
 
   return (
-    <main>
+    <main className="relative max-w-[1200px] mx-auto h-[100vh]">
       <div className="font-bold absolute left-20 bottom-20 ">
         현재 당신 지역의 날씨는..{" "}
         {kmaClient.parseWeatherCode(userWeather?.weatherCode || 0)}

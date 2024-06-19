@@ -1,8 +1,9 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import MainPage from "./pages/main";
 import { ThemeProvider } from "./components/theme-provider";
 import { ModeToggle } from "./components/ui/mode-toggler";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import MainPage from "./pages/main";
 import TrackerPage from "./pages/tracker";
+
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="atmosphere-tracker-theme">
@@ -17,8 +18,8 @@ function App() {
       </div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/tracker" element={<TrackerPage />} />
+          <Route path="/" Component={MainPage} />
+          <Route path="/tracker" Component={TrackerPage} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
