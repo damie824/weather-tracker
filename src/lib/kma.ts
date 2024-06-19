@@ -38,7 +38,7 @@ export default class KmaClient {
   async getWeatherInfo(latitude: number, longitude: number): Promise<weather> {
     const date = new Date();
     const response = await axios.get(
-      "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst",
+      "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst",
       {
         params: {
           serviceKey: this.apiKey,
