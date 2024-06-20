@@ -17,7 +17,7 @@ export default function MainPage() {
             개발자 정보
           </a>
           <a
-            href="https://github.com/damie824"
+            href="https://github.com/damie824/weather-tracker"
             className={buttonVariants({
               variant: "outline",
             })}
